@@ -25,7 +25,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lerp: 0.085,
       smoothWheel: true,
       wheelMultiplier: 1,
-      syncTouch: false, // let mobile keep its native momentum
+      // Drive touch scrolling through Lenis too, so phones/tablets get the same
+      // smooth glide as desktop (and ScrollTrigger stays in sync everywhere).
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+      touchInertiaMultiplier: 25,
       touchMultiplier: 1.6,
     });
 
