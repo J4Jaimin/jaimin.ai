@@ -1,0 +1,316 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens                                                              */
+/* -------------------------------------------------------------------------- */
+:root {
+  --bg: #060606;
+  --surface: rgba(255, 255, 255, 0.024);
+  --surface-strong: rgba(255, 255, 255, 0.045);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.14);
+
+  --text: #ededf0;
+  --muted: #8b8b95;
+  --faint: #5c5c66;
+
+  --blue: 110 168 254;
+  --indigo: 124 134 255;
+  --purple: 167 139 250;
+  --cyan: 94 234 212;
+
+  /* Live cursor position, fed by CursorSpotlight (viewport %). */
+  --mx: 50%;
+  --my: 12%;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Base                                                                       */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: auto; /* Lenis owns smooth scroll */
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-feature-settings: "ss01", "cv01", "cv03";
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(124, 134, 255, 0.28);
+    color: #fff;
+  }
+
+  /* Focus — visible but on-brand */
+  :focus-visible {
+    outline: 2px solid rgb(var(--indigo) / 0.7);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    border: 3px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Components / utilities                                                     */
+/* -------------------------------------------------------------------------- */
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-container px-6 sm:px-8 lg:px-10;
+  }
+
+  .section {
+    @apply relative py-24 sm:py-32 lg:py-40;
+  }
+
+  /* Glass surface */
+  .glass {
+    background: var(--surface);
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+      0 24px 70px -30px rgba(0, 0, 0, 0.8);
+  }
+  .glass-strong {
+    background: var(--surface-strong);
+    backdrop-filter: blur(26px) saturate(1.4);
+    -webkit-backdrop-filter: blur(26px) saturate(1.4);
+    border: 1px solid var(--hairline-strong);
+  }
+
+  /* Eyebrow label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-[var(--muted)];
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-px w-6 bg-gradient-to-r from-transparent;
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      rgb(var(--indigo) / 0.9)
+    );
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #ffffff 42%,
+      rgb(var(--blue)) 68%,
+      rgb(var(--purple)) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient-soft {
+    background: linear-gradient(180deg, #f4f4f6 0%, #a9a9b4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hairline divider */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--hairline-strong),
+      transparent
+    );
+  }
+
+  /* Conic animated border wrapper */
+  .conic-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .conic-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 0deg,
+      rgb(var(--blue) / 0.55) 60deg,
+      rgb(var(--purple) / 0.55) 120deg,
+      transparent 200deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+  }
+  .conic-border:hover::before {
+    opacity: 1;
+    animation: border-spin 6s linear infinite;
+  }
+
+  /* Always-on, slow animated gradient border for the hero portrait frame */
+  .conic-frame::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 0deg,
+      rgb(var(--blue) / 0.7) 40deg,
+      rgb(var(--indigo) / 0.5) 90deg,
+      transparent 150deg,
+      transparent 240deg,
+      rgb(var(--purple) / 0.6) 300deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-spin 14s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Diagonal light reflection that sweeps across the portrait occasionally */
+  .reflection::after {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: -60%;
+    width: 55%;
+    height: 220%;
+    transform: rotate(20deg) translateX(-120%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.03),
+      transparent
+    );
+    filter: blur(6px);
+    animation: reflection-sweep 9s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+}
+
+@layer utilities {
+  /* Cursor-driven spotlight overlay (desktop). */
+  .cursor-glow {
+    background: radial-gradient(
+      600px circle at var(--mx) var(--my),
+      rgba(124, 134, 255, 0.06),
+      transparent 40%
+    );
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+    mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Register --angle so it can animate */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes reflection-sweep {
+  0% {
+    transform: rotate(20deg) translateX(-120%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  28% {
+    transform: rotate(20deg) translateX(420%);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(20deg) translateX(420%);
+    opacity: 0;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
