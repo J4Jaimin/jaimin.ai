@@ -1,7 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Space_Grotesk, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
+
+// Space Grotesk — a technical grotesque for display & body; gives the site a
+// distinct engineering character over a neutral default.
+const sans = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+// JetBrains Mono — an actual IDE typeface, used for eyebrows, tags & metrics.
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
+
+// Playfair Display — a high-contrast luxury serif reserved solely for the
+// hero name, a classy signature against the otherwise technical type system.
+const display = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  weight: ["500", "600", "700"],
+});
 
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Aurora from "@/components/ui/Aurora";
@@ -64,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${sans.variable} ${mono.variable} ${display.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-screen font-sans antialiased selection:bg-white/10">

@@ -6,6 +6,7 @@ import {
   Layers,
   Workflow,
   Cloud,
+  Sparkles,
 } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
@@ -16,7 +17,7 @@ export const profile = {
   name: "Jaimin Rana",
   firstName: "Jaimin",
   lastName: "Rana",
-  role: "Backend Software Engineer",
+  role: "AI Full-Stack Developer",
   location: "Ahmedabad, India",
   availability: "Available for select work",
   email: "jaiminrana1102@gmail.com",
@@ -24,9 +25,9 @@ export const profile = {
   resume: "/resume.pdf",
   // One powerful sentence — what he builds.
   tagline:
-    "I build scalable, high-performance backend systems — REST APIs, distributed caching, and cloud-native services engineered to stay fast under load.",
+    "I build AI-powered full-stack products — agentic systems, RAG pipelines and LLM apps — backed by the same rigor I bring to backend and frontend engineering.",
   intro:
-    "Backend-focused software engineer with 2.5+ years designing and shipping production systems in Node.js, Express, MongoDB and MySQL. I care about clean architecture, tight latency budgets, and code that reads as well as it runs.",
+    "AI full-stack developer with experience across AI, backend and frontend engineering. I ship production systems in Node.js, Express, MongoDB and MySQL, and build generative-AI applications with LangChain, LangGraph, MCP and RAG. I care about clean architecture, tight latency budgets, and code that reads as well as it runs.",
   socials: {
     github: "https://github.com/J4Jaimin",
     linkedin: "https://www.linkedin.com/in/jaimin-r-56a756212",
@@ -56,6 +57,13 @@ export type Service = {
 };
 
 export const services: Service[] = [
+  {
+    icon: Sparkles,
+    title: "AI & Agentic Systems",
+    description:
+      "Generative-AI applications — multi-agent workflows, RAG pipelines and LLM integrations built with LangChain, LangGraph and MCP.",
+    points: ["LangChain / LangGraph", "RAG & vector search", "Agentic AI / MCP"],
+  },
   {
     icon: Server,
     title: "Backend Engineering",
@@ -119,6 +127,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Multi-Agent Pricer",
+    category: "Agentic AI · Deal Intelligence",
+    period: "2025",
+    summary:
+      "An autonomous agentic-AI framework that scans live RSS deal feeds, estimates true market value with an ensemble of a RAG frontier agent and a neural network, and pushes alerts on significant discounts.",
+    highlights: [
+      "Planning agent orchestrates a scan → price → decide → alert pipeline",
+      "Ensemble pricing: RAG frontier agent (Chroma + MiniLM) blended with a DNN regressor",
+      "Gradio dashboard with live logs, deals table & 3D t-SNE embedding view",
+    ],
+    stack: ["Python", "LangChain", "RAG", "Chroma", "Groq LLM", "Gradio"],
+    github: "https://github.com/J4Jaimin/Multi-agent-pricer",
+    featured: true,
+  },
+  {
     name: "ownCloud",
     category: "File Storage & Collaboration",
     period: "2025",
@@ -162,20 +185,6 @@ export const projects: Project[] = [
     ],
     stack: ["JavaScript", "Node.js", "Filesystem"],
     github: "https://github.com/J4Jaimin/own-git",
-  },
-  {
-    name: "GhostCart",
-    category: "E-commerce Cart System",
-    period: "2024",
-    summary:
-      "A seamless, drop-in cart system for e-commerce apps — clean state handling and APIs designed to slot into any storefront.",
-    highlights: [
-      "Reusable cart engine & APIs",
-      "Persistent, consistent cart state",
-      "Framework-agnostic integration",
-    ],
-    stack: ["JavaScript", "Node.js", "Express"],
-    github: "https://github.com/J4Jaimin/GhostCart",
   },
   {
     name: "Job Portal Backend",

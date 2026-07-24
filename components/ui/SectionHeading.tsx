@@ -29,7 +29,7 @@ export default function SectionHeading({
         <span className="eyebrow">{eyebrow}</span>
       </Reveal>
       <Reveal delay={0.06}>
-        <h2 className="max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tighter text-white sm:text-5xl lg:text-[3.4rem]">
+        <h2 className="heading-3d max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tighter text-white sm:text-5xl lg:text-[3.4rem]">
           {title}
         </h2>
       </Reveal>

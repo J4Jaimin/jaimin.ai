@@ -1,4 +1,12 @@
 const tech = [
+  "Generative AI",
+  "Agentic AI",
+  "LangChain",
+  "LangGraph",
+  "MCP",
+  "RAG",
+  "LLMs",
+  "Fine-tuning",
   "Node.js",
   "Express.js",
   "MongoDB",
@@ -10,8 +18,6 @@ const tech = [
   "Prefect",
   "TypeScript",
   "REST APIs",
-  "Mongoose",
-  "Sequelize",
   "CI/CD",
 ];
 

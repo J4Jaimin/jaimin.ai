@@ -15,6 +15,7 @@ import {
 import Reveal from "@/components/ui/Reveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { profile } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -88,7 +89,7 @@ export default function Contact() {
               <span className="eyebrow">Contact</span>
             </Reveal>
             <Reveal delay={0.06}>
-              <h2 className="mt-5 text-balance text-4xl font-semibold leading-[1.02] tracking-tighter text-white sm:text-5xl lg:text-6xl">
+              <h2 className="heading-3d mt-5 text-balance text-4xl font-semibold leading-[1.02] tracking-tighter text-white sm:text-5xl lg:text-6xl">
                 Let&rsquo;s build
                 <br />
                 something worth
@@ -164,13 +165,13 @@ export default function Contact() {
           </div>
 
           {/* ------------------------------------------------------- RIGHT */}
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} className="h-full">
             <form
               onSubmit={onSubmit}
-              className="relative overflow-hidden rounded-[1.75rem] glass-strong p-6 shadow-lift sm:p-8"
+              className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass-strong p-6 shadow-lift sm:p-8"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent-blue/10 blur-3xl" />
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-1 flex-col gap-5">
                 <Field label="Your name">
                   <input
                     required
@@ -190,14 +191,14 @@ export default function Contact() {
                     className="peer w-full bg-transparent text-white outline-none placeholder:text-[var(--faint)]"
                   />
                 </Field>
-                <Field label="Message">
+                <Field label="Message" className="flex flex-1 flex-col">
                   <textarea
                     required
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell me about the system you're building…"
-                    className="peer w-full resize-none bg-transparent text-white outline-none placeholder:text-[var(--faint)]"
+                    className="peer w-full flex-1 resize-none bg-transparent text-white outline-none placeholder:text-[var(--faint)]"
                   />
                 </Field>
 
@@ -250,12 +251,19 @@ export default function Contact() {
 function Field({
   label,
   children,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <label className="group block rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 transition-colors duration-300 focus-within:border-accent-indigo/50 focus-within:bg-white/[0.04]">
+    <label
+      className={cn(
+        "group block rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 transition-colors duration-300 focus-within:border-accent-indigo/50 focus-within:bg-white/[0.04]",
+        className
+      )}
+    >
       <span className="mb-1 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-[var(--faint)] transition-colors group-focus-within:text-accent-blue/90">
         {label}
       </span>

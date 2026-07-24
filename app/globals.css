@@ -134,6 +134,28 @@
     );
   }
 
+  /* 3D display headings — a crisp extruded edge over a soft ambient drop.
+     The solid, no-blur layers do the "3D"; the last two seat it in space. */
+  .heading-3d {
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.12),
+      0 2px 0 rgba(18, 18, 24, 0.92),
+      0 3px 0 rgba(13, 13, 18, 0.9),
+      0 4px 8px rgba(0, 0, 0, 0.5),
+      0 9px 26px rgba(0, 0, 0, 0.38);
+  }
+  /* Gradient-clipped spans can't take a dark text-shadow (it bleeds through
+     the transparent fill), so give them depth via drop-shadow instead. */
+  .heading-3d .text-gradient,
+  .heading-3d .text-gradient-soft {
+    text-shadow: none;
+    filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.45));
+  }
+  .heading-3d .text-gradient {
+    filter: drop-shadow(0 4px 10px rgba(124, 134, 255, 0.32))
+      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+  }
+
   /* Gradient text */
   .text-gradient {
     background: linear-gradient(
