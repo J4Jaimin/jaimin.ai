@@ -170,7 +170,7 @@ export default function Contact() {
           <Reveal delay={0.1} className="h-full">
             <form
               onSubmit={onSubmit}
-              className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass-strong p-6 shadow-lift sm:p-8"
+              className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass-strong bg-white/[0.035] p-6 shadow-lift sm:p-8"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent-blue/10 blur-3xl" />
               {/* the form is the page's main CTA — it gets a standing beam */}

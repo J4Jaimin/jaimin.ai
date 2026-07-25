@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   motion,
   useAnimationFrame,
@@ -48,6 +48,21 @@ export default function TechMarquee() {
 
   const baseX = useMotionValue(0);
   const directionRef = useRef(1);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const visibleRef = useRef(true);
+
+  // The belt only needs to move while it's on screen — no reason to burn a
+  // frame callback animating a strip that's scrolled far out of view.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => (visibleRef.current = entry.isIntersecting),
+      { rootMargin: "100px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // -50% of the doubled track = exactly one full copy of the list.
   const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
@@ -55,7 +70,7 @@ export default function TechMarquee() {
   const skewX = useTransform(velocity, [-1, 0, 1], [6, 0, -6]);
 
   useAnimationFrame((_, delta) => {
-    if (reduce) return;
+    if (reduce || !visibleRef.current) return;
 
     const v = velocity.get();
     // Scrolling back flips the belt — a small detail people feel more than see.
@@ -69,7 +84,8 @@ export default function TechMarquee() {
 
   return (
     <div
-      className="relative flex overflow-hidden border-y border-white/5 py-6"
+      ref={wrapRef}
+      className="relative flex overflow-hidden border-y border-white/5 py-6 [contain:layout_paint_style]"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)",

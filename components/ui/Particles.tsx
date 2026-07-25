@@ -57,8 +57,11 @@ export default function Particles({
     let particles: Particle[] = [];
     let frame = 0;
     let running = true;
+    let lastDraw = 0;
+    const FRAME_MS = 1000 / 30;
 
     const pointer = { x: -9999, y: -9999 };
+    const linkSq = linkDistance * linkDistance;
 
     const seed = () => {
       const count = Math.min(
@@ -78,7 +81,9 @@ export default function Particles({
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Cap at 1.5: this is soft, blurry decoration, so rendering it at full
+      // retina density quadruples the fill cost for no visible gain.
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = rect.width;
       height = rect.height;
       canvas.width = Math.floor(width * dpr);
@@ -97,9 +102,15 @@ export default function Particles({
       pointer.y = -9999;
     };
 
-    const draw = () => {
+    const draw = (now: number) => {
       if (!running) return;
       frame = requestAnimationFrame(draw);
+
+      // Ambient drift reads identically at 30fps and costs half as much, which
+      // leaves the main thread free for the scroll itself.
+      if (now - lastDraw < FRAME_MS) return;
+      lastDraw = now;
+
       ctx.clearRect(0, 0, width, height);
 
       for (const p of particles) {
@@ -128,21 +139,27 @@ export default function Particles({
         ctx.fill();
       }
 
-      // Proximity links — O(n²) but n stays under ~90, so it's a rounding error.
+      // Proximity links. This is O(n²), so keep the inner loop as cheap as
+      // possible: compare squared distances (no sqrt), reject on cheap axis
+      // checks first, and batch every line into a single path so the whole
+      // constellation costs one stroke call instead of hundreds.
+      ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
           const b = particles[j];
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d > linkDistance) continue;
-          ctx.beginPath();
+          const dx = a.x - b.x;
+          if (dx > linkDistance || dx < -linkDistance) continue;
+          const dy = a.y - b.y;
+          if (dy > linkDistance || dy < -linkDistance) continue;
+          if (dx * dx + dy * dy > linkSq) continue;
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(${color}, ${(1 - d / linkDistance) * 0.12})`;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
         }
       }
+      ctx.strokeStyle = `rgba(${color}, 0.07)`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
     };
 
     const start = () => {

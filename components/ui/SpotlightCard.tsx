@@ -58,7 +58,11 @@ export default function SpotlightCard({
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       className={cn(
-        "group/spot relative h-full rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm transition-colors duration-500",
+        // No backdrop-blur here on purpose: these cards scroll *with* the
+        // backdrop, so a blur costs a full re-composite every frame and buys
+        // nothing you can see. A slightly more opaque fill reads identically.
+        // `contain` keeps each card's layout/paint work to itself.
+        "group/spot relative h-full rounded-3xl border border-white/[0.08] bg-white/[0.03] transition-colors duration-500 [contain:layout_paint_style]",
         clip && "overflow-hidden",
         className
       )}

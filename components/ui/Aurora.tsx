@@ -24,13 +24,13 @@ export default function Aurora() {
       />
 
       {/* Aurora blobs — soft blue / indigo / purple, very low opacity */}
-      <div className="absolute -left-[12%] top-[-8%] h-[46vw] w-[46vw] rounded-full bg-accent-blue/[0.10] blur-[130px] animate-aurora-drift" />
+      <div className="absolute -left-[12%] top-[-8%] h-[46vw] w-[46vw] rounded-full bg-accent-blue/[0.10] blur-[130px] animate-aurora-drift will-change-transform" />
       <div
-        className="absolute right-[-10%] top-[18%] h-[42vw] w-[42vw] rounded-full bg-accent-purple/[0.09] blur-[140px] animate-aurora-drift"
+        className="absolute right-[-10%] top-[18%] h-[42vw] w-[42vw] rounded-full bg-accent-purple/[0.09] blur-[140px] animate-aurora-drift will-change-transform"
         style={{ animationDelay: "-9s" }}
       />
       <div
-        className="absolute bottom-[-14%] left-[28%] h-[40vw] w-[40vw] rounded-full bg-accent-indigo/[0.08] blur-[150px] animate-aurora-drift"
+        className="absolute bottom-[-14%] left-[28%] h-[40vw] w-[40vw] rounded-full bg-accent-indigo/[0.08] blur-[150px] animate-aurora-drift will-change-transform"
         style={{ animationDelay: "-16s" }}
       />
 

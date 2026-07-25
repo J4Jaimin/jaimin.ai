@@ -24,10 +24,6 @@
   /* Live cursor position, fed by CursorSpotlight (viewport %). */
   --mx: 50%;
   --my: 12%;
-
-  /* Live scroll velocity, fed by SmoothScroll (Lenis). Signed, ~-1 → 1. */
-  --scroll-velocity: 0;
-  --scroll-velocity-abs: 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -108,20 +104,33 @@
     @apply relative py-24 sm:py-32 lg:py-40;
   }
 
-  /* Glass surface */
+  /* Glass surface.
+     `backdrop-filter` is the most expensive thing on this page: every element
+     carrying one forces its backdrop to be re-blurred as the page scrolls. So
+     it's reserved for surfaces that genuinely have moving content behind them
+     (the fixed nav, overlays), and dropped entirely on touch devices, where
+     the GPU budget is smallest and the effect is least visible. */
   .glass {
     background: var(--surface);
-    backdrop-filter: blur(18px) saturate(1.3);
-    -webkit-backdrop-filter: blur(18px) saturate(1.3);
     border: 1px solid var(--hairline);
     box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
       0 24px 70px -30px rgba(0, 0, 0, 0.8);
   }
   .glass-strong {
     background: var(--surface-strong);
-    backdrop-filter: blur(26px) saturate(1.4);
-    -webkit-backdrop-filter: blur(26px) saturate(1.4);
     border: 1px solid var(--hairline-strong);
+  }
+
+  /* Opt in to the real blur only on pointer devices with room to spare. */
+  @media (min-width: 768px) {
+    .glass-blur {
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    }
+    .glass-strong.glass-blur {
+      backdrop-filter: blur(22px) saturate(1.4);
+      -webkit-backdrop-filter: blur(22px) saturate(1.4);
+    }
   }
 
   /* Eyebrow label */

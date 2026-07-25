@@ -32,9 +32,29 @@ export default function Nav() {
     return () => observer.disconnect();
   }, []);
 
+  // Scroll events fire far more often than this state can meaningfully change,
+  // and every setState here re-renders the whole nav. Coalesce to one check per
+  // frame, and only touch state when the threshold is actually crossed.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let ticking = false;
+    let last = false;
+
+    const check = () => {
+      ticking = false;
+      const next = window.scrollY > 24;
+      if (next !== last) {
+        last = next;
+        setScrolled(next);
+      }
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(check);
+    };
+
+    check();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -59,7 +79,10 @@ export default function Nav() {
           className={cn(
             "flex w-full max-w-container items-center justify-between rounded-full px-2.5 py-2.5 transition-all duration-500",
             scrolled
-              ? "glass-strong shadow-lift"
+              // The nav is the one surface with content genuinely moving behind
+              // it, so it keeps the blur on desktop. On mobile it goes opaque
+              // instead — same legibility, none of the per-frame blur cost.
+              ? "glass-strong glass-blur bg-ink-900/95 shadow-lift md:bg-[rgba(255,255,255,0.045)]"
               : "border border-transparent bg-transparent"
           )}
         >

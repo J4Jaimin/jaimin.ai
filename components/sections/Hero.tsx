@@ -78,7 +78,7 @@ export default function Hero() {
         {/* ------------------------------------------------------------ LEFT */}
         <motion.div variants={container} initial="hidden" animate="show" className="relative z-10">
           <motion.div variants={item}>
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-[var(--muted)] backdrop-blur">
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 text-xs text-[var(--muted)]">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -208,7 +208,7 @@ export default function Hero() {
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
               className="relative"
             >
-              <div className="conic-frame relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-850/40 p-2 shadow-[0_50px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-sm">
+              <div className="conic-frame relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-850 p-2 shadow-[0_50px_120px_-40px_rgba(0,0,0,0.9)]">
                 {/* Light circuiting the frame, twice — offset so they chase */}
                 <BorderBeam size={200} duration={9} />
                 <BorderBeam
@@ -252,7 +252,7 @@ export default function Hero() {
                 style={reduce ? undefined : { transform: "translateZ(60px)" }}
                 animate={reduce ? undefined : { y: [0, 8, 0] }}
                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-5 -left-5 flex items-center gap-3 rounded-2xl glass-strong px-4 py-3 shadow-lift"
+                className="absolute -bottom-5 -left-5 flex items-center gap-3 rounded-2xl glass-strong glass-blur px-4 py-3 shadow-lift"
               >
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-accent-blue/25 to-accent-purple/25 text-sm">
                   ⚡
@@ -268,7 +268,7 @@ export default function Hero() {
                 style={reduce ? undefined : { transform: "translateZ(40px)" }}
                 animate={reduce ? undefined : { y: [0, -7, 0] }}
                 transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-                className="absolute -right-3 top-8 rounded-full glass-strong px-3.5 py-2 text-xs text-white/80 shadow-lift"
+                className="absolute -right-3 top-8 rounded-full glass-strong glass-blur px-3.5 py-2 text-xs text-white/80 shadow-lift"
               >
                 📍 {profile.location}
               </motion.div>

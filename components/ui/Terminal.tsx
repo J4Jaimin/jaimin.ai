@@ -78,7 +78,8 @@ export default function Terminal({
     <div
       ref={ref}
       className={cn(
-        "overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-900/70 backdrop-blur-md shadow-lift",
+        // Opaque rather than blurred — see the note in SpotlightCard.
+        "overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-900 shadow-lift [contain:layout_paint_style]",
         className
       )}
     >

@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -66,9 +65,6 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     mass: 0.4,
   });
 
-  // Keep the CSS var write cheap: only touch the DOM when it visibly changes.
-  const lastVar = useRef(0);
-
   useEffect(() => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -79,16 +75,18 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     // Lerp-based glide feels more continuous and "buttery" than a fixed
     // duration curve — the viewport eases toward the target every frame.
+    //
+    // `syncTouch` is deliberately OFF. It hands touch scrolling to JS on the
+    // main thread, which throws away the browser's compositor-driven momentum
+    // scrolling — the thing phones are actually good at. The result is the
+    // rubber-banding lag you feel on mobile. Native touch scroll is already
+    // smooth, so Lenis only smooths the wheel here; ScrollTrigger stays in
+    // sync either way via the scroll listener below.
     const instance = new Lenis({
-      lerp: 0.085,
+      lerp: 0.09,
       smoothWheel: true,
       wheelMultiplier: 1,
-      // Drive touch scrolling through Lenis too, so phones/tablets get the same
-      // smooth glide as desktop (and ScrollTrigger stays in sync everywhere).
-      syncTouch: true,
-      syncTouchLerp: 0.075,
-      touchInertiaMultiplier: 25,
-      touchMultiplier: 1.6,
+      syncTouch: false,
     });
 
     const onScroll = (e: Lenis) => {
@@ -99,22 +97,12 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
       // Lenis reports px/frame; ~40px is a brisk flick. Clamp so a trackpad
       // slam can't blow out downstream transforms.
-      const normalised = Math.max(-1, Math.min(1, e.velocity / 40));
-      rawVelocity.set(normalised);
-
-      // Publish to CSS so pure-CSS effects can react without React re-renders.
-      const rounded = Math.round(normalised * 100) / 100;
-      if (rounded !== lastVar.current) {
-        lastVar.current = rounded;
-        document.documentElement.style.setProperty(
-          "--scroll-velocity",
-          String(rounded)
-        );
-        document.documentElement.style.setProperty(
-          "--scroll-velocity-abs",
-          String(Math.abs(rounded))
-        );
-      }
+      //
+      // This stays a motion value on purpose. Writing it to a CSS custom
+      // property on <html> every frame invalidates style for the whole
+      // document on every frame of every scroll; motion values drive
+      // transforms directly and skip style recalc entirely.
+      rawVelocity.set(Math.max(-1, Math.min(1, e.velocity / 40)));
     };
 
     instance.on("scroll", onScroll);
@@ -150,8 +138,6 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       gsap.ticker.remove(raf);
       instance.destroy();
       setLenis(null);
-      document.documentElement.style.removeProperty("--scroll-velocity");
-      document.documentElement.style.removeProperty("--scroll-velocity-abs");
     };
   }, [rawProgress, rawVelocity, direction]);
 
