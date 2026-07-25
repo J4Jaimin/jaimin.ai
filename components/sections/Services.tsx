@@ -3,9 +3,37 @@
 import { motion, useReducedMotion } from "framer-motion";
 import TiltCard from "@/components/ui/TiltCard";
 import SectionHeading from "@/components/ui/SectionHeading";
+import SpotlightCard from "@/components/ui/SpotlightCard";
+import BorderBeam from "@/components/ui/BorderBeam";
+import ScrambleText from "@/components/ui/ScrambleText";
+import Reveal from "@/components/ui/Reveal";
+import Terminal, { type TerminalLine } from "@/components/ui/Terminal";
 import { services } from "@/lib/data";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * The transcript for the terminal band. Deliberately a `cat` of the stack
+ * rather than a live benchmark — it presents what's already stated elsewhere
+ * on the page, not new numbers.
+ */
+const transcript: TerminalLine[] = [
+  { type: "command", text: "whoami" },
+  { type: "output", text: "jaimin — ai full-stack developer", tone: "accent" },
+  { type: "blank" },
+  { type: "command", text: "cat stack.json" },
+  { type: "output", text: "{" },
+  { type: "output", text: '  "ai":       ["LangChain", "LangGraph", "MCP", "RAG"],' },
+  { type: "output", text: '  "runtime":  ["Node.js", "Express", "Python"],' },
+  { type: "output", text: '  "data":     ["MongoDB", "MySQL", "Redis"],' },
+  { type: "output", text: '  "platform": ["Docker", "AWS", "CI/CD"]' },
+  { type: "output", text: "}" },
+  { type: "blank" },
+  { type: "command", text: "./ship --with care" },
+  { type: "output", text: "✓ clean architecture", tone: "ok" },
+  { type: "output", text: "✓ tight latency budgets", tone: "ok" },
+  { type: "output", text: "✓ code that reads as well as it runs", tone: "ok" },
+];
 
 export default function Services() {
   const reduce = useReducedMotion();
@@ -55,7 +83,12 @@ export default function Services() {
                 }}
               >
                 <TiltCard className="rounded-3xl">
-                  <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02] p-7 backdrop-blur-sm transition-colors duration-500 hover:border-white/[0.16]">
+                  <SpotlightCard className="group flex flex-col p-7 hover:border-white/[0.16]">
+                    {/* a light laps the border while you're on the card */}
+                    <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                      <BorderBeam size={140} duration={5} delay={i * 0.4} />
+                    </span>
+
                     {/* index */}
                     <span className="absolute right-6 top-6 font-mono text-xs text-white/15 transition-colors duration-500 group-hover:text-white/30">
                       {String(i + 1).padStart(2, "0")}
@@ -72,9 +105,12 @@ export default function Services() {
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-medium tracking-tight text-white">
-                      {service.title}
-                    </h3>
+                    <ScrambleText
+                      as="h3"
+                      text={service.title}
+                      trigger="hover"
+                      className="text-lg font-medium tracking-tight text-white"
+                    />
                     <p className="mt-2.5 text-pretty text-sm leading-relaxed text-[var(--muted)]">
                       {service.description}
                     </p>
@@ -89,12 +125,36 @@ export default function Services() {
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </SpotlightCard>
                 </TiltCard>
               </motion.div>
             );
           })}
         </motion.div>
+
+        {/* ------------------------------------------------- terminal band */}
+        <div className="mt-20 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <Reveal>
+            <span className="eyebrow">How it ships</span>
+            <h3 className="mt-5 text-balance text-3xl font-semibold tracking-tighter text-white sm:text-4xl">
+              Built in the terminal,
+              <br />
+              <span className="text-gradient-soft">shipped with care.</span>
+            </h3>
+            <p className="mt-5 max-w-md text-pretty text-sm leading-relaxed text-[var(--muted)]">
+              Every system starts the same way — a clear contract, a tight
+              feedback loop, and enough observability to know it&rsquo;s working
+              before anyone has to ask.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="relative">
+              <BorderBeam size={160} duration={11} />
+              <Terminal lines={transcript} />
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

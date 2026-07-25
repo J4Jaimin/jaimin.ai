@@ -24,6 +24,10 @@
   /* Live cursor position, fed by CursorSpotlight (viewport %). */
   --mx: 50%;
   --my: 12%;
+
+  /* Live scroll velocity, fed by SmoothScroll (Lenis). Signed, ~-1 → 1. */
+  --scroll-velocity: 0;
+  --scroll-velocity-abs: 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -244,6 +248,47 @@
     pointer-events: none;
   }
 
+  /* Border beam — rides the element's own border path, so it hugs any radius.
+     Positioned & coloured by <BorderBeam />.
+     Hidden by default: without `offset-path: rect()` the beam can't travel and
+     would sit parked as a bright square in the corner, so it only renders where
+     the property is actually supported. */
+  .border-beam {
+    display: none;
+  }
+  @supports (offset-path: rect(0 auto auto 0 round 1px)) {
+    .border-beam {
+      display: block;
+      offset-distance: 0%;
+      offset-anchor: 0 0;
+      animation-name: border-beam-travel;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+  }
+
+  /* Meteor streak — a dot with a tapering tail, falling on a diagonal.
+     Paired with <Meteors />, which positions and staggers each instance. */
+  .meteor {
+    animation-name: meteor-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .meteor::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 60px;
+    height: 1px;
+    transform: translateY(-50%);
+    background: linear-gradient(
+      90deg,
+      rgb(var(--indigo) / 0.7),
+      transparent
+    );
+  }
+
   /* Diagonal light reflection that sweeps across the portrait occasionally */
   .reflection::after {
     content: "";
@@ -302,6 +347,42 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+/* Meteors fall down-left, fading as they go. */
+@keyframes meteor-fall {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-720px);
+    opacity: 0;
+  }
+}
+
+/* Border beam — the light rides the element's own rounded border path. */
+@keyframes border-beam-travel {
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 

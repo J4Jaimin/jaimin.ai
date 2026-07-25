@@ -1,7 +1,10 @@
+import Particles from "./Particles";
+
 /**
  * The ambient backdrop for the whole site: a fixed matte-black field with a few
- * slow, blurred aurora blobs, a whisper-thin grid, and a vignette. Everything
- * here is decorative and non-interactive — it sits behind all content.
+ * slow, blurred aurora blobs, a whisper-thin grid, a cursor-reactive particle
+ * constellation, and a vignette. Everything here is decorative and
+ * non-interactive — it sits behind all content.
  */
 export default function Aurora() {
   return (
@@ -30,6 +33,12 @@ export default function Aurora() {
         className="absolute bottom-[-14%] left-[28%] h-[40vw] w-[40vw] rounded-full bg-accent-indigo/[0.08] blur-[150px] animate-aurora-drift"
         style={{ animationDelay: "-16s" }}
       />
+
+      {/* Particle constellation — drifts, links up, and leans off the cursor.
+          Self-disables on touch/small screens and for reduced motion. */}
+      <div className="absolute inset-0 opacity-70">
+        <Particles quantity={68} />
+      </div>
 
       {/* Top spotlight + vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_-8%,rgba(124,134,255,0.10),transparent)]" />

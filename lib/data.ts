@@ -35,6 +35,19 @@ export const profile = {
 } as const;
 
 /* -------------------------------------------------------------------------- */
+/*  Focus areas — cycled under the hero role line. Each one maps 1:1 to a       */
+/*  service below, so the rotation never claims anything new.                   */
+/* -------------------------------------------------------------------------- */
+
+export const focusAreas = [
+  "Agentic AI",
+  "RAG pipelines",
+  "Node.js backends",
+  "REST APIs",
+  "Redis caching",
+] as const;
+
+/* -------------------------------------------------------------------------- */
 /*  Metrics — quiet proof, drawn only from the résumé                          */
 /* -------------------------------------------------------------------------- */
 

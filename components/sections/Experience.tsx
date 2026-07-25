@@ -4,6 +4,8 @@ import { useRef } from "react";
 import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import { Award } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
+import SpotlightCard from "@/components/ui/SpotlightCard";
+import BorderBeam from "@/components/ui/BorderBeam";
 import { experiences, recognition } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -72,7 +74,12 @@ export default function Experience() {
                   </span>
                 </div>
 
-                <div className="group rounded-3xl border border-white/[0.07] bg-white/[0.02] p-6 backdrop-blur-sm transition-colors duration-500 hover:border-white/[0.14] sm:p-7">
+                <SpotlightCard
+                  radius={480}
+                  className="group rounded-3xl p-6 hover:border-white/[0.14] sm:p-7"
+                >
+                  {/* The current role gets a permanent beam — a quiet "live" tell */}
+                  {exp.current && <BorderBeam size={220} duration={10} />}
                   <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
                     <h3 className="text-lg font-medium tracking-tight text-white">
                       {exp.role}
@@ -115,7 +122,7 @@ export default function Experience() {
                       </span>
                     ))}
                   </div>
-                </div>
+                </SpotlightCard>
               </motion.div>
             ))}
           </div>

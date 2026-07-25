@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import MagneticButton from "@/components/ui/MagneticButton";
+import BorderBeam from "@/components/ui/BorderBeam";
+import Meteors from "@/components/ui/Meteors";
 import { profile } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -171,6 +173,15 @@ export default function Contact() {
               className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass-strong p-6 shadow-lift sm:p-8"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent-blue/10 blur-3xl" />
+              {/* the form is the page's main CTA — it gets a standing beam */}
+              <BorderBeam size={240} duration={12} />
+              <BorderBeam
+                size={240}
+                duration={12}
+                delay={6}
+                colorFrom="rgb(167 139 250)"
+                colorTo="rgb(110 168 254)"
+              />
               <div className="flex flex-1 flex-col gap-5">
                 <Field label="Your name">
                   <input
@@ -231,12 +242,13 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 0.8, ease }}
-          className="mt-24 text-center"
+          className="relative mt-24 overflow-hidden py-10 text-center"
         >
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--faint)]">
+          <Meteors number={8} />
+          <p className="relative font-mono text-xs uppercase tracking-[0.3em] text-[var(--faint)]">
             Thanks for scrolling
           </p>
-          <p className="mx-auto mt-4 max-w-2xl text-balance text-2xl font-medium tracking-tight text-white/80 sm:text-3xl">
+          <p className="relative mx-auto mt-4 max-w-2xl text-balance text-2xl font-medium tracking-tight text-white/80 sm:text-3xl">
             The best systems feel effortless.{" "}
             <span className="text-[var(--muted)]">
               I&rsquo;d love to build yours that way.

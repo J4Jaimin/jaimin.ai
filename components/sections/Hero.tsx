@@ -10,7 +10,12 @@ import {
 } from "framer-motion";
 import { ArrowDownRight, Download, Github, Linkedin, Mail } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { metrics, profile } from "@/lib/data";
+import SparklesText from "@/components/ui/SparklesText";
+import RotatingText from "@/components/ui/RotatingText";
+import CountingNumber from "@/components/ui/CountingNumber";
+import BorderBeam from "@/components/ui/BorderBeam";
+import Meteors from "@/components/ui/Meteors";
+import { focusAreas, metrics, profile } from "@/lib/data";
 import { portraitBlur } from "@/lib/portrait-blur";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -88,14 +93,24 @@ export default function Hero() {
           >
             {profile.firstName}
             <br />
-            <span className="text-gradient">{profile.lastName}.</span>
+            <SparklesText count={7}>
+              <span className="text-gradient">{profile.lastName}.</span>
+            </SparklesText>
           </motion.h1>
 
-          <motion.div variants={item} className="mt-6 flex items-center gap-3">
+          <motion.div
+            variants={item}
+            className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1.5"
+          >
             <span className="h-px w-8 bg-white/25" />
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-white/70">
               {profile.role}
             </p>
+            <span className="text-white/20">/</span>
+            <RotatingText
+              words={[...focusAreas]}
+              className="font-mono text-sm uppercase tracking-[0.2em] text-accent-blue/90"
+            />
           </motion.div>
 
           <motion.p
@@ -147,10 +162,10 @@ export default function Hero() {
             variants={item}
             className="mt-12 grid max-w-lg grid-cols-2 gap-x-8 gap-y-6 border-t border-white/5 pt-8 sm:grid-cols-4 sm:gap-x-4"
           >
-            {metrics.map((m) => (
+            {metrics.map((m, i) => (
               <div key={m.label}>
                 <dt className="text-2xl font-semibold tracking-tight text-white">
-                  {m.value}
+                  <CountingNumber value={m.value} delay={0.9 + i * 0.12} />
                 </dt>
                 <dd className="mt-1 text-[0.72rem] leading-snug text-[var(--faint)]">
                   {m.label}
@@ -175,6 +190,14 @@ export default function Hero() {
             style={reduce ? undefined : { background: glow }}
           />
 
+          {/* Meteor shower behind the portrait — depth without distraction */}
+          <div
+            aria-hidden
+            className="absolute -inset-16 -z-10 overflow-hidden rounded-[3rem]"
+          >
+            <Meteors number={10} />
+          </div>
+
           <motion.div
             style={reduce ? undefined : { rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
             className="relative"
@@ -186,6 +209,15 @@ export default function Hero() {
               className="relative"
             >
               <div className="conic-frame relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-850/40 p-2 shadow-[0_50px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-sm">
+                {/* Light circuiting the frame, twice — offset so they chase */}
+                <BorderBeam size={200} duration={9} />
+                <BorderBeam
+                  size={200}
+                  duration={9}
+                  delay={4.5}
+                  colorFrom="rgb(167 139 250)"
+                  colorTo="rgb(94 234 212)"
+                />
                 <div className="relative overflow-hidden rounded-[1.5rem]">
                   <Image
                     src="/portrait.webp"

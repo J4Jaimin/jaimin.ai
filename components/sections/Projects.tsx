@@ -5,6 +5,10 @@ import { ArrowUpRight, Github, Lock } from "lucide-react";
 import TiltCard from "@/components/ui/TiltCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 import MagneticButton from "@/components/ui/MagneticButton";
+import SpotlightCard from "@/components/ui/SpotlightCard";
+import BorderBeam from "@/components/ui/BorderBeam";
+import ScrambleText from "@/components/ui/ScrambleText";
+import Meteors from "@/components/ui/Meteors";
 import { projects, type Project } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +64,11 @@ function Cover({ project, index }: { project: Project; index: number }) {
       />
       {/* soft glow that grows on hover */}
       <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl transition-all duration-700 group-hover:scale-150 group-hover:bg-white/[0.14]" />
+
+      {/* meteors streak across the cover once you're on the card */}
+      <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <Meteors number={6} />
+      </div>
 
       {/* window chrome hint */}
       <div className="absolute left-5 top-5 flex gap-1.5">
@@ -140,14 +149,25 @@ export default function Projects() {
               className={cn(project.featured && "lg:col-span-1")}
             >
               <TiltCard max={4} className="h-full rounded-[1.75rem]">
-                <div className="group flex h-full flex-col rounded-[1.75rem] border border-white/[0.08] bg-white/[0.02] p-4 backdrop-blur-sm transition-colors duration-500 hover:border-white/[0.16] sm:p-5">
+                <SpotlightCard
+                  radius={420}
+                  clip={false}
+                  className="group flex flex-col rounded-[1.75rem] p-4 hover:border-white/[0.16] sm:p-5"
+                >
+                  <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                    <BorderBeam size={180} duration={6} delay={i * 0.3} />
+                  </span>
+
                   <Cover project={project} index={i} />
 
                   <div className="flex flex-1 flex-col px-2 pb-1 pt-6">
                     <div className="flex items-center gap-3">
-                      <h3 className="text-xl font-medium tracking-tight text-white">
-                        {project.name}
-                      </h3>
+                      <ScrambleText
+                        as="h3"
+                        text={project.name}
+                        trigger="hover"
+                        className="text-xl font-medium tracking-tight text-white"
+                      />
                       {project.status && (
                         <span className="inline-flex items-center gap-1 rounded-full border border-white/10 px-2 py-0.5 font-mono text-[0.62rem] uppercase tracking-wider text-[var(--faint)]">
                           <Lock className="h-2.5 w-2.5" />
@@ -220,7 +240,7 @@ export default function Projects() {
                       )}
                     </div>
                   </div>
-                </div>
+                </SpotlightCard>
               </TiltCard>
             </motion.article>
           ))}

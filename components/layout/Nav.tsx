@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import ScrambleText from "@/components/ui/ScrambleText";
 import { navLinks, profile } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -99,7 +100,12 @@ export default function Nav() {
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
-                  <span className="relative z-10">{link.label}</span>
+                  <ScrambleText
+                    text={link.label}
+                    trigger="hover"
+                    speed={0.8}
+                    className="relative z-10"
+                  />
                 </a>
               );
             })}

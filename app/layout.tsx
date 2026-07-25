@@ -32,6 +32,7 @@ import SmoothScroll from "@/components/providers/SmoothScroll";
 import Aurora from "@/components/ui/Aurora";
 import Grain from "@/components/ui/Grain";
 import CursorSpotlight from "@/components/ui/CursorSpotlight";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import { profile } from "@/lib/data";
@@ -104,6 +105,7 @@ export default function RootLayout({
         <CursorSpotlight />
 
         <SmoothScroll>
+          <ScrollProgress />
           <Nav />
           <main>{children}</main>
           <Footer />
